@@ -1,0 +1,198 @@
+header {
+  background-color: var(--header-color);
+  padding: 10px 16px;
+}
+
+header ~ .content {
+  background-color: var(--container-background-color);
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+main .page-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 0 15px;
+}
+
+main .page-content > header {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 35px 30px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+main .page-content > header p {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+main .page-content > header .badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+main .page-content > header .badge::after {
+  content: "NEW";
+  width: 200px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 900;
+  text-transform: uppercase;
+  background-color: var(--markup-color);
+  transform: rotate(45deg);
+  top: 15px;
+  padding: 5px 0;
+  position: absolute;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  max-height: 410px;
+  display: grid;
+  grid-template-columns: 290px auto;
+  grid-template-rows: 164px 236px;
+  gap: 10px;
+  padding: 0 5px;
+}
+
+.container aside {
+  grid-row-start: 1;
+  grid-row-end: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.container section.input-date-time {
+  grid-row-start: 1;
+  grid-row-end: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.container section.draw-list {
+  grid-row-start: 2;
+  grid-row-end: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.container .draw-list {
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+.container aside .content {
+  padding: 18px 16px;
+  flex: 1;
+}
+
+.container aside .content p {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.container aside .content p:not(:last-of-type) {
+  margin-bottom: 18px;
+}
+
+.container .input-date-time .content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 16px;
+}
+.container .input-date-time .content input,
+.container .input-date-time .content button {
+  height: 35px;
+}
+
+.container .input-date-time .content input {
+  width: 260px;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.container .input-date-time .content button {
+  font-family: inherit;
+  width: 140px;
+  background-color: var(--button-color);
+  font-size: 16px;
+  font-weight: 300;
+  border: 0;
+  color: white;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  letter-spacing: 1px;
+}
+
+.container .input-date-time .content button:hover {
+  transform: scale(1.05);
+  background-color: white;
+  color: rgb(250, 62, 0);
+}
+
+.container .draw-list header {
+  display: flex;
+  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 130px auto;
+  font-size: 12px;
+  font-weight: medium;
+  padding: 12px 10px;
+}
+
+.container .draw-list .content {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.container .draw-list .content .draw-list-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 130px auto;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.container .draw-list .content .draw-list-item:nth-of-type(odd) {
+  background-color: var(--list-item-background);
+}
+
+.container .draw-list .content .draw-list-item > div {
+  padding: 12px 10px;
+  position: relative;
+}
+
+.container .draw-list .content .draw-list-item .draw-date:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 1px solid black;
+  height: 19px;
+}
