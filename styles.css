@@ -15,7 +15,6 @@ main {
   width: 100%;
 }
 
-
 main .page-content {
   display: flex;
   align-items: center;
@@ -125,6 +124,7 @@ main .page-content > header .badge::after {
 .container .input-date-time .content input,
 .container .input-date-time .content button {
   height: 35px;
+  border: 0;
 }
 
 .container .input-date-time .content input {
@@ -139,7 +139,6 @@ main .page-content > header .badge::after {
   background-color: var(--button-color);
   font-size: 16px;
   font-weight: 300;
-  border: 0;
   color: white;
   text-transform: uppercase;
   cursor: pointer;
@@ -177,10 +176,16 @@ main .page-content > header .badge::after {
   grid-template-columns: 130px auto;
   font-size: 14px;
   font-weight: 400;
+  transition: all .1s ease;
 }
 
 .container .draw-list .content .draw-list-item:nth-of-type(odd) {
   background-color: var(--list-item-background);
+}
+
+.container .draw-list .content .draw-list-item:hover {
+  background-color: #E1E2E3;
+  color: black;
 }
 
 .container .draw-list .content .draw-list-item > div {
@@ -196,4 +201,51 @@ main .page-content > header .badge::after {
   transform: translateY(-50%);
   border-left: 1px solid black;
   height: 19px;
+}
+
+@media only screen and (max-width: 780px) {
+  main {
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 15px 0;
+  }
+
+  main .page-content {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-bottom: 15px;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    max-height: 100%;
+  }
+
+  .container .input-date-time {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .container .input-date-time .content {
+    justify-content: center;
+    padding: 15px 0;
+  }
+}
+
+@media only screen and (max-width: 460px) {
+  .container .input-date-time .content {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .container .input-date-time .content button {
+    width: 100%;
+  }
+
+  .container .input-date-time .content input {
+    width: 100%;
+  }
 }
