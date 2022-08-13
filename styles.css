@@ -239,7 +239,6 @@ main .page-content > header .badge::after {
   text-align: center;
   margin-bottom: 16px;
   font-weight: 500;
-
 }
 
 .modal .content button {
@@ -258,7 +257,8 @@ main .page-content > header .badge::after {
   color: white;
 }
 
-@media only screen and (max-width: 780px) {
+@media only screen and (max-width: 780px) {  
+
   main {
     justify-content: flex-start;
     align-items: flex-start;
@@ -287,6 +287,12 @@ main .page-content > header .badge::after {
   .container .input-date-time .content {
     justify-content: center;
     padding: 15px 0;
+  }
+
+  .container .input-date-time .content button:not([disabled]):hover {
+    transform: scale(1);
+    background-color: var(--button-color);
+    color: white;
   }
 }
 
