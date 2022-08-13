@@ -146,10 +146,15 @@ main .page-content > header .badge::after {
   letter-spacing: 1px;
 }
 
-.container .input-date-time .content button:hover {
+.container .input-date-time .content button:not([disabled]):hover {
   transform: scale(1.05);
   background-color: white;
   color: rgb(250, 62, 0);
+}
+
+.container .input-date-time .content button[disabled] {
+  filter: grayscale(0.5);
+  cursor: not-allowed;
 }
 
 .container .draw-list header {
@@ -176,7 +181,7 @@ main .page-content > header .badge::after {
   grid-template-columns: 130px auto;
   font-size: 14px;
   font-weight: 400;
-  transition: all .1s ease;
+  transition: all 0.1s ease;
 }
 
 .container .draw-list .content .draw-list-item:nth-of-type(odd) {
@@ -184,7 +189,7 @@ main .page-content > header .badge::after {
 }
 
 .container .draw-list .content .draw-list-item:hover {
-  background-color: #E1E2E3;
+  background-color: #e1e2e3;
   color: black;
 }
 
