@@ -1,10 +1,42 @@
 const inputValue = document.querySelector("#date-time-input");
 const submitButton = document.querySelector("#submitButton");
 const drawList = document.querySelector(".draw-list .content");
+const asideContainer = document.querySelector("aside");
+
+submitButton.addEventListener("click", async () => {
+  if (inputValue.value) {
+    handleLoadingRequest("loading");
+
+    const drawDate = getNextLottoDraw(new Date(inputValue?.value));
+
+    if (drawDate === "error") {
+      showModal();
+      handleLoadingRequest("reset");
+      return;
+    }
+
+    const currentBitcoinvalue = await handleGetBitcoinAmount(drawDate);
+
+    if (!currentBitcoinvalue) {
+      addNewDrawListItem(drawDate, 0);
+      handleLoadingRequest("reset");
+      return;
+    }
+
+    addNewDrawListItem(drawDate, currentBitcoinvalue);
+    handleLoadingRequest("reset");
+  }
+});
 
 function getNextLottoDraw(date = new Date()) {
   let nextDraw = new Date();
   const dateWeekDay = date.getDay();
+
+  // Validate years
+  if (dateWeekDay instanceof Date === false && isNaN(dateWeekDay)) {
+    return (nextDraw = "error");
+  }
+
   const dateHour = date.getHours();
   const wednesdayCondition1 = dateWeekDay <= 2; // till Tuesday
   const wednesdayCondition2 = dateWeekDay === 3 && dateHour <= 19; // wednesday, validating hour
@@ -34,17 +66,72 @@ function getNextLottoDraw(date = new Date()) {
     nextDraw = getDraw(3);
   }
 
-  //   console.log("weekday:", dateWeekDay);
-  //   console.log("hour:", dateHour);
-  //   console.log("nextDrawDate:", nextDraw);
-
   return nextDraw;
 }
 
-function handleSubmitButton(action) {
+async function handleGetBitcoinAmount(date) {
+  const formatedDate = `${date.getDate()}-${
+    date.getMonth() + 1
+  }-${date.getFullYear()}`;
+
+  const currentBitcoinPrice = await fetch(
+    `https://api.coingecko.com/api/v3/coins/bitcoin`
+  )
+    .then((res) => res.json())
+    .then((data) => data?.market_data?.current_price?.eur);
+
+  const bitcoinPriceByDate = await fetch(
+    `https://api.coingecko.com/api/v3/coins/bitcoin/history?date=${formatedDate}`
+  )
+    .then((res) => res.json())
+    .then((data) => data?.market_data?.current_price?.eur);
+
+  const bitcoinValue = 100 / bitcoinPriceByDate;
+  const clientBitcoinValueToday = bitcoinValue * currentBitcoinPrice;
+  return clientBitcoinValueToday;
+}
+
+function addNewDrawListItem(date, bitcoinValue) {
+  const drawDateString = `${date.getDate()}-${
+    date.getMonth() + 1
+  }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes() + "0"}`;
+
+  const bitcoinValueString =
+    bitcoinValue > 0 ? `€${bitcoinValue.toFixed(2)}` : "Not available";
+
+  const item = `
+  <div class="draw-list-item">
+    <div class="draw-date">${drawDateString}</div>
+    <div class="draw-value">${bitcoinValueString}</div>
+  </div>`;
+
+  drawList.insertAdjacentHTML("afterbegin", item);
+
+  // Only mobile
+  if (window.innerWidth <= 780) {
+    asideContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function handleLoadingRequest(action) {
+  const loadingText = `
+  <div class="animated-loading">
+    <span>L</span>
+    <span>o</span>
+    <span>a</span>
+    <span>d</span>
+    <span>i</span>
+    <span>n</span>
+    <span>g</span>
+    <span>.</span>
+    <span>.</span>
+    <span>.</span>
+  </div>`;
+
   if (action === "loading") {
     submitButton.disabled = true;
-    submitButton.innerHTML = "Loading...";
+    submitButton.innerHTML = null;
+    submitButton.insertAdjacentHTML("afterbegin", loadingText);
   }
 
   if (action === "reset") {
@@ -54,63 +141,35 @@ function handleSubmitButton(action) {
   }
 }
 
-async function handleGetBitcoinAmount(date) {
-  const formatedDate = `${date.getDate()}-${
-    date.getMonth() + 1
-  }-${date.getFullYear()}`;
+function showModal() {
+  const modal = `
+  <div class="modal">
+    <div class="content">
+      <h1>Invalid date! Please provide a valid date.</h1>
+      <button class="close-modal">Ok</button>
+    </div> 
+  </div>`;
 
-  try {
-    const bitcoinPriceByDate = await fetch(
-      `https://api.coingecko.com/api/v3/coins/bitcoin/history?date=${formatedDate}`
-    )
-      .then((res) => res.json())
-      .then((data) => data?.market_data?.current_price?.eur);
+  document.body.insertAdjacentHTML("afterbegin", modal);
 
-    const currentBitcoinPrice = await fetch(
-      `https://api.coingecko.com/api/v3/coins/bitcoin`
-    )
-      .then((res) => res.json())
-      .then((data) => data?.market_data?.current_price?.eur);
-
-    const bitcoinValue = 100 / bitcoinPriceByDate;
-
-    const bitcoinValueToday = bitcoinValue * currentBitcoinPrice;
-
-    if (bitcoinValueToday !== NaN && bitcoinPriceByDate !== undefined) {
-      return bitcoinValueToday;
-    }
-    console.log(bitcoinPriceByDate);
-    console.log(currentBitcoinPrice);
-    console.log(bitcoinValueToday);
-  } catch (error) {
-    console.log(error);
-  }
+  document.querySelector(".close-modal")?.addEventListener("click", () => {
+    document.querySelector(".modal").remove();
+  });
 }
 
-function createDrawListItem(date, bitcoinValue) {
-  const drawDateString = `${date.getDate()}-${
-    date.getMonth() + 1
-  }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes() + "0"}`;
+// //create a div with class draw-list-item
+// const newDrawItem = document.createElement("div");
+// newDrawItem.className = "draw-list-item";
 
-  const bitcoinValueString = `€${bitcoinValue}`;
-  //create a div with class draw-list-item
-  //create a div iside drawlistitem with class draw-date
-  //create a div iside drawlistitem with class draw-value
-}
+// //create a div iside drawlistitem with class draw-date
+// const newDrawDateItem = document.createElement("div");
+// newDrawDateItem.className = "draw-date";
 
-function addDrawListItem() {}
+// //create a div iside drawlistitem with class draw-value
+// const newDrawValueItem = document.createElement("div");
+// newDrawValueItem.className = "draw-value";
 
-submitButton.addEventListener("click", async () => {
-  if (inputValue.value) {
-    //Start submit actionå
-    // handleSubmitButton("loading")
+// newDrawItem.appendChild(newDrawDateItem);
+// newDrawItem.appendChild(newDrawValueItem);
 
-    //const drawDateString = drawDate.toLocaleDateString("en-IE");
-    const drawDate = getNextLottoDraw(new Date(inputValue.value));
-    const currentBitcoinvalue = await handleGetBitcoinAmount(drawDate);
-    createDrawListItem(drawDate, currentBitcoinvalue);
-
-    // Reset Button
-    // handleSubmitButton("reset")
-  }
-});
+// console.log(newDrawItem);

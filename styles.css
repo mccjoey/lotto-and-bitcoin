@@ -173,6 +173,7 @@ main .page-content > header .badge::after {
   align-items: flex-start;
   flex-direction: column;
   overflow-y: auto;
+  perspective: 100px;
 }
 
 .container .draw-list .content .draw-list-item {
@@ -181,7 +182,8 @@ main .page-content > header .badge::after {
   grid-template-columns: 130px auto;
   font-size: 14px;
   font-weight: 400;
-  transition: all 0.1s ease;
+  transition: all 0.75s cubic-bezier(0.36, -0.64, 0.34, 1.76);
+  animation: slide-down 0.75s;
 }
 
 .container .draw-list .content .draw-list-item:nth-of-type(odd) {
@@ -206,6 +208,54 @@ main .page-content > header .badge::after {
   transform: translateY(-50%);
   border-left: 1px solid black;
   height: 19px;
+}
+
+.modal {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal .content {
+  background-color: white;
+  width: 100%;
+  max-width: 300px;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  animation: show-modal 0.5s ease;
+}
+
+.modal .content h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 500;
+
+}
+
+.modal .content button {
+  border: 0;
+  background-color: black;
+  color: white;
+  padding: 10px 30px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.modal .content button:hover {
+  background-color: var(--button-color);
+  color: white;
 }
 
 @media only screen and (max-width: 780px) {
@@ -252,5 +302,94 @@ main .page-content > header .badge::after {
 
   .container .input-date-time .content input {
     width: 100%;
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    height: 0;
+    transform: scale(0);
+    opacity: 0;
+    filter: contrast(0.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    height: 40px;
+    opacity: 1;
+    filter: contrast(1);
+  }
+}
+
+@keyframes show-modal {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animated-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animated-loading span {
+  position: relative;
+  top: 2px;
+  animation: bounce 0.3s ease infinite alternate;
+  letter-spacing: 1px;
+  font-size: 16px;
+}
+
+.animated-loading span:nth-of-type(1) {
+  animation-delay: 0.15s;
+}
+
+.animated-loading span:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+
+.animated-loading span:nth-of-type(3) {
+  animation-delay: 0.25s;
+}
+
+.animated-loading span:nth-of-type(4) {
+  animation-delay: 0.3s;
+}
+
+.animated-loading span:nth-of-type(5) {
+  animation-delay: 0.35s;
+}
+
+.animated-loading span:nth-of-type(6) {
+  animation-delay: 0.4s;
+}
+
+.animated-loading span:nth-of-type(7) {
+  animation-delay: 0.45s;
+}
+
+.animated-loading span:nth-of-type(8) {
+  animation-delay: 0.5s;
+}
+
+.animated-loading span:nth-of-type(9) {
+  animation-delay: 0.55s;
+}
+
+.animated-loading span:nth-of-type(10) {
+  animation-delay: 0.6s;
+}
+
+@keyframes bounce {
+  100% {
+    top: -2px;
   }
 }
